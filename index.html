@@ -4,22 +4,174 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menu du Restaurant</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { text-align: center; font-family: Arial, sans-serif; padding: 20px; }
-        .btn { padding: 10px 20px; margin: 10px; font-size: 16px; background: #007BFF; color: white; border: none; cursor: pointer; border-radius: 5px; }
-        .btn:hover { background: #0056b3; }
-        iframe { width: 80%; height: 600px; border: none; margin-top: 20px; }
+        :root {
+            --primary-color: #8D5524;
+            --secondary-color: #F3E9DC;
+            --accent-color: #C1A57B;
+            --text-color: #333333;
+        }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0;
+            padding: 0;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+            margin: 30px 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        
+        .language-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .btn { 
+            padding: 12px 24px; 
+            font-size: 16px; 
+            background: var(--primary-color); 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .btn:hover { 
+            background: #724419; 
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .btn span {
+            font-size: 1.2rem;
+            margin-right: 5px;
+        }
+        
+        .iframe-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        iframe { 
+            width: 90%; 
+            max-width: 900px;
+            height: 700px; 
+            border: none; 
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        .hidden {
+            display: none;
+            opacity: 0;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: auto;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+                margin: 20px 0;
+            }
+            
+            .language-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 80%;
+                justify-content: center;
+            }
+            
+            iframe {
+                height: 500px;
+            }
+        }
     </style>
 </head>
 <body>
-    <h2>Choisissez votre langue | Choose your language | 选择语言 | 언어를 선택하세요</h2>
+    <header>
+        <h1>Bon Appétit</h1>
+    </header>
     
-    <button class="btn" onclick="openMenu('en')">🇬🇧 English</button>
-    <button class="btn" onclick="openMenu('zh')">🇨🇳 中文</button>
-    <button class="btn" onclick="openMenu('ko')">🇰🇷 한국어</button>
-    <button class="btn" onclick="openMenu('lo')">🇱🇦 ພາສາລາວ</button>
-
-    <iframe id="pdfViewer" src="" hidden></iframe>
+    <div class="container">
+        <h2>Choisissez votre langue | Choose your language | 选择语言 | 언어를 선택하세요</h2>
+        
+        <div class="language-container">
+            <button class="btn" onclick="openMenu('en')"><span>🇬🇧</span> English</button>
+            <button class="btn" onclick="openMenu('zh')"><span>🇨🇳</span> 中文</button>
+            <button class="btn" onclick="openMenu('ko')"><span>🇰🇷</span> 한국어</button>
+            <button class="btn" onclick="openMenu('lo')"><span>🇱🇦</span> ພາສາລາວ</button>
+        </div>
+        
+        <div id="iframeContainer" class="iframe-container hidden">
+            <iframe id="pdfViewer" src=""></iframe>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; 2023 Bon Appétit Restaurant. Tous droits réservés.
+    </footer>
 
     <script>
         function openMenu(lang) {
@@ -30,9 +182,24 @@
                 "lo": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1d-wI9loyBW5Zs89tKDeHL5L_ikl5vAdt&embedded=true"
             };
             
-            // Changer la source de l'iframe pour afficher le PDF
-            document.getElementById("pdfViewer").src = menuLinks[lang];
-            document.getElementById("pdfViewer").hidden = false;
+            const iframeContainer = document.getElementById("iframeContainer");
+            const pdfViewer = document.getElementById("pdfViewer");
+            
+            // Animer la disparition si le iframe est déjà visible
+            if (!iframeContainer.classList.contains("hidden")) {
+                iframeContainer.style.opacity = 0;
+                setTimeout(() => {
+                    pdfViewer.src = menuLinks[lang];
+                    iframeContainer.style.opacity = 1;
+                }, 300);
+            } else {
+                // Premier affichage
+                pdfViewer.src = menuLinks[lang];
+                iframeContainer.classList.remove("hidden");
+                setTimeout(() => {
+                    iframeContainer.style.opacity = 1;
+                }, 10);
+            }
         }
     </script>
 </body>
