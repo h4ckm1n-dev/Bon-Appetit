@@ -439,13 +439,44 @@
     
     <div id="menuOverlay" class="fullscreen-overlay">
         <div class="loading-indicator" id="loadingIndicator"></div>
-        <div class="menu-viewer">
-            <iframe id="menuFrame" class="menu-frame" src=""></iframe>
+        <div class="menu-viewer" id="menuViewer">
+            <iframe id="menuFrame" class="menu-frame" src="about:blank" loading="eager"></iframe>
         </div>
         <button id="closeButton" class="close-button">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
+
+    <!-- Ajouter un script de Web Worker pour gérer le préchargement en arrière-plan -->
+    <script id="workerScript" type="javascript/worker">
+        // Liste des URL à précharger
+        let urlsToPrefetch = [];
+        let fetchedUrls = new Set();
+        
+        // Recevoir les messages du thread principal
+        self.addEventListener('message', function(e) {
+            if (e.data.command === 'prefetch') {
+                urlsToPrefetch = e.data.urls;
+                prefetchUrls();
+            }
+        });
+        
+        // Précharger les URLs en arrière-plan
+        function prefetchUrls() {
+            urlsToPrefetch.forEach(url => {
+                if (!fetchedUrls.has(url)) {
+                    fetch(url, { mode: 'no-cors', priority: 'high' })
+                        .then(() => {
+                            fetchedUrls.add(url);
+                            self.postMessage({ status: 'prefetched', url: url });
+                        })
+                        .catch(error => {
+                            console.log('Erreur de préchargement:', error);
+                        });
+                }
+            });
+        }
+    </script>
 
     <script>
         // Liens des menus
@@ -459,51 +490,94 @@
         // Sélecteurs DOM
         const menuOverlay = document.getElementById("menuOverlay");
         const menuFrame = document.getElementById("menuFrame");
+        const menuViewer = document.getElementById("menuViewer");
         const closeButton = document.getElementById("closeButton");
         const loadingIndicator = document.getElementById("loadingIndicator");
         
-        // Système de cache avancé pour les menus
+        // Système de cache ultra-rapide pour les menus
         const menuCache = {
             currentLang: null,
             loadedLangs: new Set(),
-            frames: {}  // Stockera les iframes pré-chargées pour chaque langue
+            frames: {},  // Stockera les iframes pour chaque langue
+            worker: null // Web Worker pour préchargement
         };
         
-        // Précharger tous les menus en arrière-plan
-        function preloadAllMenus() {
-            Object.keys(menuLinks).forEach(lang => {
-                if (!menuCache.frames[lang]) {
-                    // Créer une iframe cachée pour chaque langue
-                    const iframe = document.createElement('iframe');
-                    iframe.style.display = 'none';
-                    iframe.style.position = 'absolute';
-                    iframe.style.width = '0';
-                    iframe.style.height = '0';
-                    iframe.src = menuLinks[lang];
-                    
-                    // Suivre l'état de chargement
-                    iframe.addEventListener('load', () => {
-                        menuCache.loadedLangs.add(lang);
-                        
-                        // Si c'est la langue actuellement affichée, masquer l'indicateur de chargement
-                        if (lang === menuCache.currentLang) {
-                            loadingIndicator.style.opacity = "0";
+        // Créer le Web Worker pour le préchargement
+        function createPreloadWorker() {
+            const workerBlob = new Blob([document.querySelector('#workerScript').textContent], 
+                                       { type: 'text/javascript' });
+            const workerUrl = URL.createObjectURL(workerBlob);
+            menuCache.worker = new Worker(workerUrl);
+            
+            // Écouter les messages du worker
+            menuCache.worker.addEventListener('message', function(e) {
+                if (e.data.status === 'prefetched') {
+                    const lang = Object.keys(menuLinks).find(key => menuLinks[key] === e.data.url);
+                    if (lang) {
+                        console.log('Menu préchargé:', lang);
+                        if (!menuCache.frames[lang]) {
+                            createHiddenFrame(lang);
                         }
-                    });
-                    
-                    // Stocker l'iframe dans notre cache
-                    menuCache.frames[lang] = iframe;
-                    document.body.appendChild(iframe);
+                    }
                 }
+            });
+            
+            // Demander au worker de précharger les URLs
+            menuCache.worker.postMessage({
+                command: 'prefetch',
+                urls: Object.values(menuLinks)
             });
         }
         
-        // Ouvrir le menu avec transition instantanée
+        // Créer une iframe cachée
+        function createHiddenFrame(lang) {
+            if (!menuCache.frames[lang]) {
+                const container = document.createElement('div');
+                container.className = 'hidden-frame-container';
+                container.style.cssText = 'position:absolute; left:-9999px; top:-9999px; width:0; height:0; visibility:hidden; overflow:hidden;';
+                
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'border:none; width:100%; height:100%;';
+                iframe.src = menuLinks[lang];
+                
+                // Suivre l'état de chargement
+                iframe.addEventListener('load', () => {
+                    menuCache.loadedLangs.add(lang);
+                    
+                    // Si c'est la langue actuellement affichée, masquer l'indicateur de chargement
+                    if (lang === menuCache.currentLang) {
+                        loadingIndicator.style.opacity = "0";
+                    }
+                });
+                
+                container.appendChild(iframe);
+                document.body.appendChild(container);
+                
+                // Stocker la référence à l'iframe et son conteneur
+                menuCache.frames[lang] = {
+                    container: container,
+                    iframe: iframe
+                };
+            }
+        }
+        
+        // Méthode optimisée pour afficher un menu avec transition instantanée
         function openMenu(lang) {
             // Afficher l'overlay si ce n'est pas déjà fait
             if (!menuOverlay.classList.contains("visible")) {
                 document.body.style.overflow = "hidden";
                 menuOverlay.classList.add("visible");
+                
+                // Animation d'apparition progressive
+                menuViewer.style.transition = 'transform 0.4s ease, opacity 0.4s ease';
+                menuViewer.style.transform = 'scale(0.95)';
+                menuViewer.style.opacity = '0';
+                
+                // Force repaint
+                void menuViewer.offsetWidth;
+                
+                menuViewer.style.transform = 'scale(1)';
+                menuViewer.style.opacity = '1';
             }
             
             // Toujours afficher l'indicateur de chargement lors d'un changement
@@ -511,33 +585,73 @@
             
             // Si c'est un nouveau menu ou un changement de langue
             if (menuCache.currentLang !== lang) {
+                // Technique 1: Si iframe préchargée existe, l'utiliser directement
+                if (menuCache.frames[lang] && menuCache.loadedLangs.has(lang)) {
+                    // Méthode ultra-rapide: remplacer le contenu de l'iframe
+                    try {
+                        const iframeContent = menuCache.frames[lang].iframe;
+                        const menuContent = iframeContent.contentDocument || 
+                                           iframeContent.contentWindow.document;
+                        
+                        // Essayer de cloner directement le contenu (approche la plus rapide)
+                        if (menuContent && menuContent.documentElement) {
+                            menuFrame.src = 'about:blank';
+                            setTimeout(() => {
+                                try {
+                                    const targetDocument = menuFrame.contentDocument || 
+                                                         menuFrame.contentWindow.document;
+                                    
+                                    // Tenter d'écrire directement le document
+                                    targetDocument.open();
+                                    targetDocument.write(menuContent.documentElement.outerHTML);
+                                    targetDocument.close();
+                                    loadingIndicator.style.opacity = "0";
+                                } catch (e) {
+                                    // Fallback si l'accès direct échoue
+                                    console.log('Fallback au chargement direct');
+                                    menuFrame.src = menuLinks[lang];
+                                }
+                            }, 10);
+                        } else {
+                            // Si l'accès au document a échoué, charger normalement
+                            menuFrame.src = menuLinks[lang];
+                        }
+                    } catch (e) {
+                        // Sécurité: si l'accès CORS échoue, utiliser le chargement direct
+                        console.log('Erreur d\'accès CORS, chargement standard');
+                        menuFrame.src = menuLinks[lang];
+                    }
+                } 
+                // Technique 2: Créer une iframe cachée et charger normalement
+                else {
+                    if (!menuCache.frames[lang]) {
+                        createHiddenFrame(lang);
+                    }
+                    menuFrame.src = menuLinks[lang];
+                }
+                
                 // Mettre à jour la langue actuelle
                 menuCache.currentLang = lang;
-                
-                // Si le menu est déjà préchargé et prêt
-                if (menuCache.loadedLangs.has(lang)) {
-                    // Mise à jour instantanée depuis le cache
-                    menuFrame.src = menuLinks[lang];
-                    loadingIndicator.style.opacity = "0";
-                } else {
-                    // Démarrer un nouveau chargement si le menu n'a pas été préchargé
-                    // ou si le préchargement n'est pas encore terminé
-                    menuFrame.src = menuLinks[lang];
-                    
-                    // Si le menu est en cours de préchargement, l'indicateur sera masqué par l'event listener
-                    // Sinon, nous le masquerons quand l'iframe principale sera chargée
-                }
             }
         }
         
-        // Fermer le menu
+        // Fermer le menu avec animation améliorée
         function closeMenu() {
-            menuOverlay.classList.remove("visible");
+            // Animation de fermeture fluide
+            menuViewer.style.transform = 'scale(0.95)';
+            menuViewer.style.opacity = '0';
             
-            // Réactiver le défilement sur le body
             setTimeout(() => {
+                menuOverlay.classList.remove("visible");
+                
+                // Réactiver le défilement sur le body
                 document.body.style.overflow = "auto";
-            }, 400);
+                
+                // Réinitialiser pour la prochaine ouverture
+                setTimeout(() => {
+                    menuViewer.style.transform = 'scale(0.95)';
+                }, 400);
+            }, 300);
             
             // Quitter le mode plein écran si actif
             if (document.fullscreenElement) {
@@ -547,12 +661,15 @@
         
         // Gérer le chargement de l'iframe principale
         menuFrame.addEventListener("load", function() {
-            // Masquer l'indicateur de chargement 
-            loadingIndicator.style.opacity = "0";
-            
-            // Marquer cette langue comme chargée
-            if (menuCache.currentLang) {
-                menuCache.loadedLangs.add(menuCache.currentLang);
+            // Ne pas masquer lors du chargement de about:blank
+            if (menuFrame.src !== 'about:blank') {
+                // Masquer l'indicateur de chargement 
+                loadingIndicator.style.opacity = "0";
+                
+                // Marquer cette langue comme chargée
+                if (menuCache.currentLang) {
+                    menuCache.loadedLangs.add(menuCache.currentLang);
+                }
             }
         });
         
@@ -595,27 +712,47 @@
             requestFullscreen();
         });
         
-        // Optimiser le chargement en fonction de la connexion
-        function updatePreloadStrategy() {
-            // Sur connexion rapide, précharger tous les menus
-            if (navigator.connection && 
-                (navigator.connection.effectiveType === '4g' || navigator.connection.effectiveType === '3g')) {
-                preloadAllMenus();
+        // Utilisation d'Intersection Observer pour précharger automatiquement
+        // quand l'utilisateur s'approche des boutons de langue
+        function setupIntersectionObserver() {
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            // Lorsque les boutons de langue deviennent visibles, précharger tous les menus
+                            if (!menuCache.worker) {
+                                createPreloadWorker();
+                            }
+                            observer.disconnect();
+                        }
+                    });
+                }, {threshold: 0.1});
+                
+                // Observer la section de langue
+                const languageSection = document.querySelector('.language-grid');
+                if (languageSection) {
+                    observer.observe(languageSection);
+                }
             }
         }
         
-        // Lancer le préchargement après chargement de la page
+        // Initialiser l'application
         window.addEventListener('load', function() {
-            // Retarder légèrement pour prioriser l'affichage initial
+            // Configurer l'Intersection Observer pour un préchargement plus intelligent
+            setupIntersectionObserver();
+            
+            // Préchargement prioritaire de quelques langues les plus probables
             setTimeout(() => {
-                updatePreloadStrategy();
-            }, 2000);
+                createHiddenFrame('en'); // Précharger prioritairement l'anglais
+                
+                // Après un délai plus long, charger les autres langues
+                setTimeout(() => {
+                    if (!menuCache.worker) {
+                        createPreloadWorker();
+                    }
+                }, 3000);
+            }, 1000);
         });
-        
-        // Vérifier si l'API Network Information est disponible
-        if (navigator.connection) {
-            navigator.connection.addEventListener('change', updatePreloadStrategy);
-        }
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
