@@ -462,81 +462,80 @@
         const closeButton = document.getElementById("closeButton");
         const loadingIndicator = document.getElementById("loadingIndicator");
         
-        // Système de cache pour les menus déjà chargés
+        // Système de cache avancé pour les menus
         const menuCache = {
             currentLang: null,
             loadedLangs: new Set(),
-            iframeStates: {}
+            frames: {}  // Stockera les iframes pré-chargées pour chaque langue
         };
         
-        // Ouvrir le menu
-        function openMenu(lang) {
-            // Afficher l'indicateur de chargement si ce menu n'a pas encore été chargé
-            if (!menuCache.loadedLangs.has(lang)) {
-                loadingIndicator.style.opacity = "1";
-            }
-            
-            // Afficher l'overlay
-            document.body.style.overflow = "hidden";
-            menuOverlay.classList.add("visible");
-            
-            // Si nous avons un menu actif différent, le cacher
-            if (menuCache.currentLang && menuCache.currentLang !== lang) {
-                // Sauvegarder l'état de l'iframe actuel si nécessaire
-                if (menuCache.loadedLangs.has(menuCache.currentLang)) {
-                    const tempIframe = document.createElement('iframe');
-                    tempIframe.style.display = 'none';
-                    tempIframe.src = menuLinks[menuCache.currentLang];
-                    menuCache.iframeStates[menuCache.currentLang] = tempIframe;
-                    document.body.appendChild(tempIframe);
-                }
-            }
-            
-            // Définir la langue actuelle
-            menuCache.currentLang = lang;
-            
-            // Charger le menu, soit depuis le cache, soit nouvellement
-            if (menuCache.loadedLangs.has(lang) && menuCache.iframeStates[lang]) {
-                // Récupérer depuis le cache
-                setTimeout(() => {
-                    menuFrame.src = menuLinks[lang];
-                    loadingIndicator.style.opacity = "0";
-                }, 10);
-            } else {
-                // Charger un nouveau menu
-                setTimeout(() => {
-                    menuFrame.src = menuLinks[lang];
-                    // Marquer comme chargé pour les prochaines fois
-                    menuCache.loadedLangs.add(lang);
-                }, 10);
-            }
-            
-            // Précharger les autres menus après un délai
-            setTimeout(() => {
-                preloadOtherMenus(lang);
-            }, 3000); // 3 secondes après le chargement du menu actuel
-        }
-        
-        // Précharger les autres menus
-        function preloadOtherMenus(currentLang) {
+        // Précharger tous les menus en arrière-plan
+        function preloadAllMenus() {
             Object.keys(menuLinks).forEach(lang => {
-                if (lang !== currentLang && !menuCache.loadedLangs.has(lang)) {
-                    const link = document.createElement('link');
-                    link.rel = 'prefetch';
-                    link.href = menuLinks[lang];
-                    link.as = 'document';
-                    document.head.appendChild(link);
+                if (!menuCache.frames[lang]) {
+                    // Créer une iframe cachée pour chaque langue
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.style.position = 'absolute';
+                    iframe.style.width = '0';
+                    iframe.style.height = '0';
+                    iframe.src = menuLinks[lang];
+                    
+                    // Suivre l'état de chargement
+                    iframe.addEventListener('load', () => {
+                        menuCache.loadedLangs.add(lang);
+                        
+                        // Si c'est la langue actuellement affichée, masquer l'indicateur de chargement
+                        if (lang === menuCache.currentLang) {
+                            loadingIndicator.style.opacity = "0";
+                        }
+                    });
+                    
+                    // Stocker l'iframe dans notre cache
+                    menuCache.frames[lang] = iframe;
+                    document.body.appendChild(iframe);
                 }
             });
+        }
+        
+        // Ouvrir le menu avec transition instantanée
+        function openMenu(lang) {
+            // Afficher l'overlay si ce n'est pas déjà fait
+            if (!menuOverlay.classList.contains("visible")) {
+                document.body.style.overflow = "hidden";
+                menuOverlay.classList.add("visible");
+            }
+            
+            // Toujours afficher l'indicateur de chargement lors d'un changement
+            loadingIndicator.style.opacity = "1";
+            
+            // Si c'est un nouveau menu ou un changement de langue
+            if (menuCache.currentLang !== lang) {
+                // Mettre à jour la langue actuelle
+                menuCache.currentLang = lang;
+                
+                // Si le menu est déjà préchargé et prêt
+                if (menuCache.loadedLangs.has(lang)) {
+                    // Mise à jour instantanée depuis le cache
+                    menuFrame.src = menuLinks[lang];
+                    loadingIndicator.style.opacity = "0";
+                } else {
+                    // Démarrer un nouveau chargement si le menu n'a pas été préchargé
+                    // ou si le préchargement n'est pas encore terminé
+                    menuFrame.src = menuLinks[lang];
+                    
+                    // Si le menu est en cours de préchargement, l'indicateur sera masqué par l'event listener
+                    // Sinon, nous le masquerons quand l'iframe principale sera chargée
+                }
+            }
         }
         
         // Fermer le menu
         function closeMenu() {
             menuOverlay.classList.remove("visible");
             
-            // Garder l'iframe chargée, mais masquer l'overlay
+            // Réactiver le défilement sur le body
             setTimeout(() => {
-                loadingIndicator.style.opacity = "0";
                 document.body.style.overflow = "auto";
             }, 400);
             
@@ -546,13 +545,14 @@
             }
         }
         
-        // Gérer le chargement
+        // Gérer le chargement de l'iframe principale
         menuFrame.addEventListener("load", function() {
+            // Masquer l'indicateur de chargement 
             loadingIndicator.style.opacity = "0";
             
-            // Optimisation: précharger intelligemment après la première interaction
-            if (menuCache.loadedLangs.size === 1) {
-                navigator.connection && navigator.connection.effectiveType === '4g' && preloadOtherMenus(menuCache.currentLang);
+            // Marquer cette langue comme chargée
+            if (menuCache.currentLang) {
+                menuCache.loadedLangs.add(menuCache.currentLang);
             }
         });
         
@@ -594,23 +594,27 @@
         menuFrame.addEventListener("dblclick", function() {
             requestFullscreen();
         });
-
-        // Détection de la connection pour optimiser le préchargement
-        function updateConnectionStatus() {
-            if (navigator.connection) {
-                const connection = navigator.connection;
-                if (connection.effectiveType === '4g' && menuCache.loadedLangs.size > 0) {
-                    const notLoaded = Object.keys(menuLinks).filter(lang => !menuCache.loadedLangs.has(lang));
-                    if (notLoaded.length > 0) {
-                        preloadOtherMenus(menuCache.currentLang);
-                    }
-                }
+        
+        // Optimiser le chargement en fonction de la connexion
+        function updatePreloadStrategy() {
+            // Sur connexion rapide, précharger tous les menus
+            if (navigator.connection && 
+                (navigator.connection.effectiveType === '4g' || navigator.connection.effectiveType === '3g')) {
+                preloadAllMenus();
             }
         }
         
+        // Lancer le préchargement après chargement de la page
+        window.addEventListener('load', function() {
+            // Retarder légèrement pour prioriser l'affichage initial
+            setTimeout(() => {
+                updatePreloadStrategy();
+            }, 2000);
+        });
+        
         // Vérifier si l'API Network Information est disponible
         if (navigator.connection) {
-            navigator.connection.addEventListener('change', updateConnectionStatus);
+            navigator.connection.addEventListener('change', updatePreloadStrategy);
         }
 
         if ('serviceWorker' in navigator) {
