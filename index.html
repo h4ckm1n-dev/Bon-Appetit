@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu du Restaurant</title>
+    <title>Menus - Bon Appétit</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #f5f6fa;
-            --accent-color: #e74c3c;
-            --text-color: #333;
+            --primary: #1a1a1a;
+            --secondary: #f8f8f8;
+            --accent: #d64641;
+            --text: #333;
             --light-text: #fff;
-            --dark-overlay: rgba(0, 0, 0, 0.8);
-            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            --border-radius: 16px;
+            --box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            --transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         
         * {
@@ -27,432 +27,424 @@
             -webkit-tap-highlight-color: transparent;
         }
         
+        html {
+            scroll-behavior: smooth;
+        }
+        
         body { 
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--secondary-color);
-            color: var(--text-color);
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--secondary);
+            color: var(--text);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            line-height: 1.6;
         }
         
-        header {
-            padding: 3rem 0 2rem;
+        .hero {
             position: relative;
-            background: #2c3e50;  /* fallback for old browsers */
-            background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
-            background: linear-gradient(to right, #4ca1af, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-            text-align: center;
-        }
-        
-        .bg-pattern {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-            z-index: 0;
-        }
-        
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .logo-icon {
-            color: var(--accent-color);
-            margin-right: 10px;
-            font-size: 2.2rem;
-        }
-        
-        h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.2rem;
-            font-weight: 700;
-            color: var(--light-text);
-            letter-spacing: 1px;
-            margin: 0;
-            position: relative;
-            z-index: 1;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .tagline {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-top: 0.5rem;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 0;
-            position: relative;
-        }
-        
-        h2 {
-            font-family: 'Cormorant Garamond', serif;
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 2.5rem;
-            color: var(--primary-color);
-            font-weight: 600;
-            position: relative;
-            padding-bottom: 15px;
-        }
-        
-        h2::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 3px;
-            background-color: var(--accent-color);
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        
-        .language-selection {
-            text-align: center;
-            padding: 1rem 0 2rem;
-        }
-        
-        .language-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-        
-        .language-card {
-            background-color: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-            transform: translateY(0);
-            position: relative;
-            cursor: pointer;
-        }
-        
-        .language-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        
-        .language-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 5px;
-            background-color: var(--accent-color);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            transform-origin: left;
-        }
-        
-        .language-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .flag {
-            display: block;
-            font-size: 3rem;
-            padding: 1.5rem 0;
-            text-align: center;
-        }
-        
-        .language-name {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 0.8rem;
-            text-align: center;
-            font-weight: 500;
+            height: 40vh;
+            min-height: 280px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            overflow: hidden;
+            background-color: var(--primary);
         }
         
-        .language-name i {
-            transition: transform 0.3s;
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #111, #333);
+            opacity: 0.9;
         }
         
-        .language-card:hover .language-name i {
-            transform: translateX(5px);
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            padding: 0 20px;
         }
         
-        .fullscreen-container {
+        .logo {
+            margin-bottom: 1rem;
+        }
+        
+        .logo-icon {
+            color: var(--accent);
+            font-size: 2.5rem;
+        }
+        
+        h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--light-text);
+            margin: 0;
+            font-weight: normal;
+            letter-spacing: 1px;
+        }
+        
+        .tagline {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+        }
+        
+        main {
+            flex: 1;
+            padding: 2rem 0;
+        }
+        
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .menu-section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+            margin-top: -60px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-header {
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        
+        h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: clamp(1.5rem, 4vw, 1.8rem);
+            color: var(--primary);
+            font-weight: normal;
+            margin-bottom: 1rem;
+        }
+        
+        .language-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1.5rem 2.5rem;
+        }
+        
+        .language-item {
+            background-color: var(--secondary);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+        
+        .language-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .language-item:active {
+            transform: translateY(-4px);
+        }
+        
+        .flag-container {
+            padding: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, #f5f5f5, #ffffff);
+        }
+        
+        .flag {
+            font-size: 3.5rem;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+            transition: var(--transition);
+        }
+        
+        .language-item:hover .flag {
+            transform: scale(1.1);
+        }
+        
+        .language-info {
+            padding: 1.2rem;
+            background-color: var(--primary);
+            color: var(--light-text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+        
+        .language-info i {
+            font-size: 0.9rem;
+            transition: var(--transition);
+            opacity: 0.8;
+        }
+        
+        .language-item:hover .language-info {
+            background-color: var(--accent);
+        }
+        
+        .language-item:hover .language-info i {
+            transform: translateX(4px);
+            opacity: 1;
+        }
+        
+        .fullscreen-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: var(--dark-overlay);
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             z-index: 1000;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            visibility: hidden;
             opacity: 0;
-            transition: opacity 0.5s ease;
-            backdrop-filter: blur(5px);
+            transition: all 0.4s ease;
         }
         
-        .fullscreen-iframe {
-            width: 94%;
-            height: 92%;
-            border: none;
-            border-radius: 10px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        .fullscreen-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .menu-viewer {
+            width: 95%;
+            height: 90%;
             background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            transition: all 0.5s ease;
+            transform: scale(0.95);
+            opacity: 0;
         }
         
-        .close-btn {
+        .fullscreen-overlay.visible .menu-viewer {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .menu-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .close-button {
             position: absolute;
             top: 20px;
             right: 20px;
-            width: 45px;
-            height: 45px;
-            background-color: var(--accent-color);
+            width: 44px;
+            height: 44px;
+            background-color: var(--accent);
             color: white;
             border: none;
             border-radius: 50%;
-            font-size: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             transition: all 0.3s ease;
             z-index: 1001;
         }
         
-        .close-btn:hover {
-            background-color: #c0392b;
+        .close-button:hover {
+            background-color: #c13f3a;
             transform: rotate(90deg);
         }
         
-        .hidden {
-            display: none;
-            opacity: 0;
-        }
-        
-        footer {
-            background-color: var(--primary-color);
-            color: rgba(255, 255, 255, 0.8);
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: auto;
-            font-size: 0.9rem;
-            position: relative;
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .footer-link {
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-        
-        .footer-link:hover {
-            color: var(--accent-color);
-        }
-        
-        .social-icons {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
-            border-radius: 50%;
+        .close-button i {
             font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-3px);
         }
         
         .copyright {
-            margin-top: 1.5rem;
-            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 1.5rem 0;
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 2rem;
         }
         
-        /* Animation pour affichage initial */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Animations */
+        @keyframes fadeUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
         }
         
-        header, .language-selection, footer {
-            animation: fadeIn 0.8s ease-out forwards;
+        .hero-content, .menu-section {
+            animation: fadeUp 0.8s ease forwards;
         }
         
-        .language-card {
+        .language-item {
             opacity: 0;
-            animation: fadeIn 0.5s ease-out forwards;
+            animation: fadeUp 0.5s ease forwards;
         }
         
-        .language-card:nth-child(1) { animation-delay: 0.1s; }
-        .language-card:nth-child(2) { animation-delay: 0.2s; }
-        .language-card:nth-child(3) { animation-delay: 0.3s; }
-        .language-card:nth-child(4) { animation-delay: 0.4s; }
+        .language-item:nth-child(1) { animation-delay: 0.1s; }
+        .language-item:nth-child(2) { animation-delay: 0.2s; }
+        .language-item:nth-child(3) { animation-delay: 0.3s; }
+        .language-item:nth-child(4) { animation-delay: 0.4s; }
         
+        /* Loading indicator */
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        
+        /* Media Queries */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            .hero {
+                height: 35vh;
             }
             
-            h2 {
-                font-size: 1.8rem;
-                margin-bottom: 2rem;
+            .language-grid {
+                grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+                gap: 1rem;
+                padding: 0 1rem 2rem;
             }
             
-            .language-container {
-                grid-template-columns: 1fr;
-                max-width: 300px;
-            }
-            
-            .flag {
-                font-size: 2.5rem;
-                padding: 1rem 0;
-            }
-            
-            .fullscreen-iframe {
-                width: 95%;
+            .menu-viewer {
+                width: 98%;
                 height: 85%;
             }
             
-            .close-btn {
+            .close-button {
                 top: 15px;
                 right: 15px;
                 width: 40px;
                 height: 40px;
             }
+        }
+        
+        @media (min-width: 992px) {
+            .flag {
+                font-size: 4rem;
+            }
             
-            .footer-links {
-                flex-direction: column;
-                gap: 1rem;
+            .flag-container {
+                padding: 2.5rem;
+            }
+            
+            .section-header {
+                padding: 2.5rem;
+            }
+            
+            .menu-viewer {
+                width: 90%;
+                max-width: 1200px;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="bg-pattern"></div>
-        <div class="logo">
-            <i class="fa-solid fa-utensils logo-icon"></i>
+    <header class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="logo">
+                <i class="fa-solid fa-utensils logo-icon"></i>
+            </div>
+            <h1>Bon Appétit</h1>
+            <p class="tagline">NOS MENUS</p>
         </div>
-        <h1>Bon Appétit</h1>
-        <p class="tagline">UNE EXPÉRIENCE CULINAIRE INOUBLIABLE</p>
     </header>
     
     <main>
         <div class="container">
-            <section class="language-selection">
-                <h2>Choisissez votre langue</h2>
+            <section class="menu-section">
+                <div class="section-header">
+                    <h2>Sélectionnez votre langue</h2>
+                </div>
                 
-                <div class="language-container">
-                    <div class="language-card" onclick="openMenu('en')">
-                        <div class="flag">🇬🇧</div>
-                        <div class="language-name">
+                <div class="language-grid">
+                    <div class="language-item" onclick="openMenu('en')">
+                        <div class="flag-container">
+                            <span class="flag">🇬🇧</span>
+                        </div>
+                        <div class="language-info">
                             English <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                     
-                    <div class="language-card" onclick="openMenu('zh')">
-                        <div class="flag">🇨🇳</div>
-                        <div class="language-name">
+                    <div class="language-item" onclick="openMenu('zh')">
+                        <div class="flag-container">
+                            <span class="flag">🇨🇳</span>
+                        </div>
+                        <div class="language-info">
                             中文 <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                     
-                    <div class="language-card" onclick="openMenu('ko')">
-                        <div class="flag">🇰🇷</div>
-                        <div class="language-name">
+                    <div class="language-item" onclick="openMenu('ko')">
+                        <div class="flag-container">
+                            <span class="flag">🇰🇷</span>
+                        </div>
+                        <div class="language-info">
                             한국어 <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                     
-                    <div class="language-card" onclick="openMenu('lo')">
-                        <div class="flag">🇱🇦</div>
-                        <div class="language-name">
+                    <div class="language-item" onclick="openMenu('lo')">
+                        <div class="flag-container">
+                            <span class="flag">🇱🇦</span>
+                        </div>
+                        <div class="language-info">
                             ພາສາລາວ <i class="fa-solid fa-arrow-right"></i>
                         </div>
                     </div>
                 </div>
             </section>
+            
+            <div class="copyright">
+                &copy; 2023 Bon Appétit
+            </div>
         </div>
     </main>
     
-    <div id="fullscreenContainer" class="fullscreen-container hidden">
-        <button id="closeBtn" class="close-btn">
+    <div id="menuOverlay" class="fullscreen-overlay">
+        <div class="loading-indicator" id="loadingIndicator"></div>
+        <div class="menu-viewer">
+            <iframe id="menuFrame" class="menu-frame" src=""></iframe>
+        </div>
+        <button id="closeButton" class="close-button">
             <i class="fa-solid fa-xmark"></i>
         </button>
-        <iframe id="fullscreenViewer" class="fullscreen-iframe" src=""></iframe>
     </div>
-    
-    <footer>
-        <div class="footer-content">
-            <div class="footer-links">
-                <a href="#" class="footer-link">À propos de nous</a>
-                <a href="#" class="footer-link">Réservations</a>
-                <a href="#" class="footer-link">Contact</a>
-                <a href="#" class="footer-link">Politique de confidentialité</a>
-            </div>
-            
-            <div class="social-icons">
-                <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
-                <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
-                <a href="#" class="social-icon"><i class="fa-brands fa-tripadvisor"></i></a>
-            </div>
-            
-            <div class="copyright">
-                &copy; 2023 Bon Appétit Restaurant. Tous droits réservés.
-            </div>
-        </div>
-    </footer>
 
     <script>
         // Liens des menus
@@ -463,92 +455,84 @@
             "lo": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=140piNM28iJzAVrxEKVpQrOxdCsaHf6kB&embedded=true"
         };
         
-        // Éléments DOM
-        const fullscreenContainer = document.getElementById("fullscreenContainer");
-        const fullscreenViewer = document.getElementById("fullscreenViewer");
-        const closeBtn = document.getElementById("closeBtn");
+        // Sélecteurs DOM
+        const menuOverlay = document.getElementById("menuOverlay");
+        const menuFrame = document.getElementById("menuFrame");
+        const closeButton = document.getElementById("closeButton");
+        const loadingIndicator = document.getElementById("loadingIndicator");
         
-        // Ouvrir le menu en plein écran
+        // Ouvrir le menu
         function openMenu(lang) {
-            // Animation de chargement
-            fullscreenViewer.style.opacity = "0.3";
+            // Afficher l'indicateur de chargement
+            loadingIndicator.style.opacity = "1";
             
-            // Ajouter le lien au iframe
-            fullscreenViewer.src = menuLinks[lang];
-            
-            // Afficher le conteneur
-            fullscreenContainer.classList.remove("hidden");
-            
-            // Activer l'opacité après un court délai (pour l'animation)
-            setTimeout(() => {
-                fullscreenContainer.style.opacity = "1";
-                setTimeout(() => {
-                    fullscreenViewer.style.opacity = "1";
-                }, 300);
-            }, 10);
-            
-            // Désactiver le défilement sur le body
+            // Afficher l'overlay
             document.body.style.overflow = "hidden";
+            menuOverlay.classList.add("visible");
             
-            // Activer le mode plein écran si possible
-            enableFullscreen();
+            // Charger le menu
+            menuFrame.src = menuLinks[lang];
         }
         
         // Fermer le menu
         function closeMenu() {
-            // Diminuer l'opacité
-            fullscreenContainer.style.opacity = "0";
+            menuOverlay.classList.remove("visible");
             
-            // Cacher le conteneur après l'animation
+            // Réinitialiser après la transition
             setTimeout(() => {
-                fullscreenContainer.classList.add("hidden");
-                fullscreenViewer.src = "";
-            }, 500);
-            
-            // Réactiver le défilement sur le body
-            document.body.style.overflow = "auto";
+                menuFrame.src = "";
+                loadingIndicator.style.opacity = "0";
+                document.body.style.overflow = "auto";
+            }, 400);
             
             // Quitter le mode plein écran si actif
-            exitFullscreen();
+            if (document.fullscreenElement) {
+                exitFullscreen();
+            }
         }
         
-        // Gérer le chargement de l'iframe
-        fullscreenViewer.onload = function() {
-            fullscreenViewer.style.opacity = "1";
-        };
+        // Gérer le chargement
+        menuFrame.addEventListener("load", function() {
+            loadingIndicator.style.opacity = "0";
+        });
         
-        // Event listener pour le bouton de fermeture
-        closeBtn.addEventListener("click", closeMenu);
+        // Événement de fermeture
+        closeButton.addEventListener("click", closeMenu);
         
-        // Support du mode plein écran pour différents navigateurs
-        function enableFullscreen() {
+        // Gestion de la touche Echap
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && menuOverlay.classList.contains("visible")) {
+                closeMenu();
+            }
+        });
+        
+        // Activer le mode plein écran
+        function requestFullscreen() {
             const elem = document.documentElement;
             
             if (elem.requestFullscreen) {
-                elem.requestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
+                elem.requestFullscreen().catch(() => {});
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen().catch(() => {});
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen().catch(() => {});
             }
         }
         
         // Quitter le mode plein écran
         function exitFullscreen() {
             if (document.exitFullscreen) {
-                document.exitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
-            } else if (document.webkitExitFullscreen) { /* Safari */
-                document.webkitExitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
-            } else if (document.msExitFullscreen) { /* IE11 */
-                document.msExitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
+                document.exitFullscreen().catch(() => {});
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen().catch(() => {});
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen().catch(() => {});
             }
         }
         
-        // Gestion de la touche Escape pour fermer le menu
-        document.addEventListener("keydown", function(e) {
-            if (e.key === "Escape" && !fullscreenContainer.classList.contains("hidden")) {
-                closeMenu();
-            }
+        // Double-clic sur l'iframe pour le plein écran
+        menuFrame.addEventListener("dblclick", function() {
+            requestFullscreen();
         });
     </script>
 </body>
