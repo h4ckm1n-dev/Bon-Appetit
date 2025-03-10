@@ -30,7 +30,7 @@ self.addEventListener('install', event => {
                 }),
             // Cache pour les menus (on ne les précache pas tous pour économiser la bande passante)
             caches.open(CACHE_NAME)
-                .then(cache => {
+                .then(() => {
                     console.log('Cache des menus initialisé');
                     // Nous ne préchargeons pas les menus ici - ils seront ajoutés au cache lors de leur accès
                     return Promise.resolve();
@@ -61,7 +61,6 @@ self.addEventListener('activate', event => {
 
 // Stratégie de mise en cache des menus: Network-first avec fallback sur le cache
 self.addEventListener('fetch', event => {
-    const url = new URL(event.request.url);
     
     // Vérifier si la demande est pour un menu PDF
     const isMenuPDF = menuURLs.some(menuURL => event.request.url.includes(menuURL));
