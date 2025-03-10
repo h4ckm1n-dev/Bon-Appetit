@@ -6,107 +6,246 @@
     <title>Menu du Restaurant</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #8D5524;
-            --secondary-color: #F3E9DC;
-            --accent-color: #C1A57B;
-            --text-color: #333333;
+            --primary-color: #2c3e50;
+            --secondary-color: #f5f6fa;
+            --accent-color: #e74c3c;
+            --text-color: #333;
+            --light-text: #fff;
+            --dark-overlay: rgba(0, 0, 0, 0.8);
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body { 
-            font-family: 'Poppins', sans-serif; 
-            margin: 0;
-            padding: 0;
+            font-family: 'Montserrat', sans-serif;
             background-color: var(--secondary-color);
             color: var(--text-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
         }
         
         header {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 20px 0;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 3rem 0 2rem;
+            position: relative;
+            background: #2c3e50;  /* fallback for old browsers */
+            background: -webkit-linear-gradient(to right, #4ca1af, #2c3e50);  /* Chrome 10-25, Safari 5.1-6 */
+            background: linear-gradient(to right, #4ca1af, #2c3e50); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+            text-align: center;
+        }
+        
+        .bg-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .logo-icon {
+            color: var(--accent-color);
+            margin-right: 10px;
+            font-size: 2.2rem;
+        }
+        
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--light-text);
+            letter-spacing: 1px;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .tagline {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
         }
         
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        h1 {
-            font-family: 'Playfair Display', serif;
-            margin: 0;
-            font-size: 2.5rem;
-            font-weight: 700;
-            text-align: center;
+            padding: 2rem 0;
+            position: relative;
         }
         
         h2 {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Cormorant Garamond', serif;
             text-align: center;
-            margin: 30px 0;
-            font-size: 1.8rem;
+            font-size: 2rem;
+            margin-bottom: 2.5rem;
             color: var(--primary-color);
+            font-weight: 600;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--accent-color);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .language-selection {
+            text-align: center;
+            padding: 1rem 0 2rem;
         }
         
         .language-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
         }
         
-        .btn { 
-            padding: 12px 24px; 
-            font-size: 16px; 
-            background: var(--primary-color); 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            border-radius: 8px; 
-            transition: all 0.3s ease;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 600;
+        .language-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            transform: translateY(0);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .language-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .language-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background-color: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: left;
+        }
+        
+        .language-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .flag {
+            display: block;
+            font-size: 3rem;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .language-name {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem;
+            text-align: center;
+            font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .btn:hover { 
-            background: #724419; 
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .btn span {
-            font-size: 1.2rem;
-            margin-right: 5px;
-        }
-        
-        .iframe-container {
-            width: 100%;
-            display: flex;
             justify-content: center;
-            margin: 20px 0;
-            transition: opacity 0.5s ease;
+            gap: 8px;
         }
         
-        iframe { 
-            width: 90%; 
-            max-width: 900px;
-            height: 700px; 
-            border: none; 
+        .language-name i {
+            transition: transform 0.3s;
+        }
+        
+        .language-card:hover .language-name i {
+            transform: translateX(5px);
+        }
+        
+        .fullscreen-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-overlay);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+        
+        .fullscreen-iframe {
+            width: 94%;
+            height: 92%;
+            border: none;
             border-radius: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            background-color: white;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+        
+        .close-btn:hover {
+            background-color: #c0392b;
+            transform: rotate(90deg);
         }
         
         .hidden {
@@ -116,91 +255,301 @@
         
         footer {
             background-color: var(--primary-color);
-            color: white;
+            color: rgba(255, 255, 255, 0.8);
             text-align: center;
-            padding: 15px 0;
+            padding: 2rem 0;
             margin-top: auto;
             font-size: 0.9rem;
+            position: relative;
         }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--accent-color);
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            margin-top: 1.5rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        /* Animation pour affichage initial */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        header, .language-selection, footer {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .language-card {
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+        
+        .language-card:nth-child(1) { animation-delay: 0.1s; }
+        .language-card:nth-child(2) { animation-delay: 0.2s; }
+        .language-card:nth-child(3) { animation-delay: 0.3s; }
+        .language-card:nth-child(4) { animation-delay: 0.4s; }
         
         @media (max-width: 768px) {
             h1 {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
             
             h2 {
-                font-size: 1.5rem;
-                margin: 20px 0;
+                font-size: 1.8rem;
+                margin-bottom: 2rem;
             }
             
             .language-container {
+                grid-template-columns: 1fr;
+                max-width: 300px;
+            }
+            
+            .flag {
+                font-size: 2.5rem;
+                padding: 1rem 0;
+            }
+            
+            .fullscreen-iframe {
+                width: 95%;
+                height: 85%;
+            }
+            
+            .close-btn {
+                top: 15px;
+                right: 15px;
+                width: 40px;
+                height: 40px;
+            }
+            
+            .footer-links {
                 flex-direction: column;
-                align-items: center;
-            }
-            
-            .btn {
-                width: 80%;
-                justify-content: center;
-            }
-            
-            iframe {
-                height: 500px;
+                gap: 1rem;
             }
         }
     </style>
 </head>
 <body>
     <header>
+        <div class="bg-pattern"></div>
+        <div class="logo">
+            <i class="fa-solid fa-utensils logo-icon"></i>
+        </div>
         <h1>Bon Appétit</h1>
+        <p class="tagline">UNE EXPÉRIENCE CULINAIRE INOUBLIABLE</p>
     </header>
     
-    <div class="container">
-        <h2>Choisissez votre langue | Choose your language | 选择语言 | 언어를 선택하세요</h2>
-        
-        <div class="language-container">
-            <button class="btn" onclick="openMenu('en')"><span>🇬🇧</span> English</button>
-            <button class="btn" onclick="openMenu('zh')"><span>🇨🇳</span> 中文</button>
-            <button class="btn" onclick="openMenu('ko')"><span>🇰🇷</span> 한국어</button>
-            <button class="btn" onclick="openMenu('lo')"><span>🇱🇦</span> ພາສາລາວ</button>
+    <main>
+        <div class="container">
+            <section class="language-selection">
+                <h2>Choisissez votre langue</h2>
+                
+                <div class="language-container">
+                    <div class="language-card" onclick="openMenu('en')">
+                        <div class="flag">🇬🇧</div>
+                        <div class="language-name">
+                            English <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="language-card" onclick="openMenu('zh')">
+                        <div class="flag">🇨🇳</div>
+                        <div class="language-name">
+                            中文 <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="language-card" onclick="openMenu('ko')">
+                        <div class="flag">🇰🇷</div>
+                        <div class="language-name">
+                            한국어 <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="language-card" onclick="openMenu('lo')">
+                        <div class="flag">🇱🇦</div>
+                        <div class="language-name">
+                            ພາສາລາວ <i class="fa-solid fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
-        
-        <div id="iframeContainer" class="iframe-container hidden">
-            <iframe id="pdfViewer" src=""></iframe>
-        </div>
+    </main>
+    
+    <div id="fullscreenContainer" class="fullscreen-container hidden">
+        <button id="closeBtn" class="close-btn">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <iframe id="fullscreenViewer" class="fullscreen-iframe" src=""></iframe>
     </div>
     
     <footer>
-        &copy; 2023 Bon Appétit Restaurant. Tous droits réservés.
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="#" class="footer-link">À propos de nous</a>
+                <a href="#" class="footer-link">Réservations</a>
+                <a href="#" class="footer-link">Contact</a>
+                <a href="#" class="footer-link">Politique de confidentialité</a>
+            </div>
+            
+            <div class="social-icons">
+                <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fa-brands fa-tripadvisor"></i></a>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Bon Appétit Restaurant. Tous droits réservés.
+            </div>
+        </div>
     </footer>
 
     <script>
+        // Liens des menus
+        const menuLinks = {
+            "en": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1J1guvLykjAQ_lYjrWDaRLvqc-8XIHy_5&embedded=true",
+            "zh": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1HDnE2CcNP-ur1muXaSFVe6nbfiksQHvV&embedded=true",
+            "ko": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1NOKmN5PVzRpDmxhUh1IEg3ZA2bFK0W5u&embedded=true",
+            "lo": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1d-wI9loyBW5Zs89tKDeHL5L_ikl5vAdt&embedded=true"
+        };
+        
+        // Éléments DOM
+        const fullscreenContainer = document.getElementById("fullscreenContainer");
+        const fullscreenViewer = document.getElementById("fullscreenViewer");
+        const closeBtn = document.getElementById("closeBtn");
+        
+        // Ouvrir le menu en plein écran
         function openMenu(lang) {
-            let menuLinks = {
-                "en": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1J1guvLykjAQ_lYjrWDaRLvqc-8XIHy_5&embedded=true",
-                "zh": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1HDnE2CcNP-ur1muXaSFVe6nbfiksQHvV&embedded=true",
-                "ko": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1NOKmN5PVzRpDmxhUh1IEg3ZA2bFK0W5u&embedded=true",
-                "lo": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1d-wI9loyBW5Zs89tKDeHL5L_ikl5vAdt&embedded=true"
-            };
+            // Animation de chargement
+            fullscreenViewer.style.opacity = "0.3";
             
-            const iframeContainer = document.getElementById("iframeContainer");
-            const pdfViewer = document.getElementById("pdfViewer");
+            // Ajouter le lien au iframe
+            fullscreenViewer.src = menuLinks[lang];
             
-            // Animer la disparition si le iframe est déjà visible
-            if (!iframeContainer.classList.contains("hidden")) {
-                iframeContainer.style.opacity = 0;
+            // Afficher le conteneur
+            fullscreenContainer.classList.remove("hidden");
+            
+            // Activer l'opacité après un court délai (pour l'animation)
+            setTimeout(() => {
+                fullscreenContainer.style.opacity = "1";
                 setTimeout(() => {
-                    pdfViewer.src = menuLinks[lang];
-                    iframeContainer.style.opacity = 1;
+                    fullscreenViewer.style.opacity = "1";
                 }, 300);
-            } else {
-                // Premier affichage
-                pdfViewer.src = menuLinks[lang];
-                iframeContainer.classList.remove("hidden");
-                setTimeout(() => {
-                    iframeContainer.style.opacity = 1;
-                }, 10);
+            }, 10);
+            
+            // Désactiver le défilement sur le body
+            document.body.style.overflow = "hidden";
+            
+            // Activer le mode plein écran si possible
+            enableFullscreen();
+        }
+        
+        // Fermer le menu
+        function closeMenu() {
+            // Diminuer l'opacité
+            fullscreenContainer.style.opacity = "0";
+            
+            // Cacher le conteneur après l'animation
+            setTimeout(() => {
+                fullscreenContainer.classList.add("hidden");
+                fullscreenViewer.src = "";
+            }, 500);
+            
+            // Réactiver le défilement sur le body
+            document.body.style.overflow = "auto";
+            
+            // Quitter le mode plein écran si actif
+            exitFullscreen();
+        }
+        
+        // Gérer le chargement de l'iframe
+        fullscreenViewer.onload = function() {
+            fullscreenViewer.style.opacity = "1";
+        };
+        
+        // Event listener pour le bouton de fermeture
+        closeBtn.addEventListener("click", closeMenu);
+        
+        // Support du mode plein écran pour différents navigateurs
+        function enableFullscreen() {
+            const elem = document.documentElement;
+            
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen().catch(err => console.log("Le mode plein écran n'est pas supporté ou autorisé"));
             }
         }
+        
+        // Quitter le mode plein écran
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
+            } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
+            } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen().catch(err => console.log("Erreur lors de la sortie du mode plein écran"));
+            }
+        }
+        
+        // Gestion de la touche Escape pour fermer le menu
+        document.addEventListener("keydown", function(e) {
+            if (e.key === "Escape" && !fullscreenContainer.classList.contains("hidden")) {
+                closeMenu();
+            }
+        });
     </script>
 </body>
 </html>
