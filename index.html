@@ -661,6 +661,7 @@
         
         // Gérer le chargement de l'iframe principale
         menuFrame.addEventListener("load", function() {
+            console.log("Menu loaded:", menuFrame.src);
             // Ne pas masquer lors du chargement de about:blank
             if (menuFrame.src !== 'about:blank') {
                 // Masquer l'indicateur de chargement 
@@ -671,6 +672,10 @@
                     menuCache.loadedLangs.add(menuCache.currentLang);
                 }
             }
+        });
+        
+        menuFrame.addEventListener("error", function() {
+            console.log("Error loading menu:", menuFrame.src);
         });
         
         // Événement de fermeture
