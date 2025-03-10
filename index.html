@@ -8,6 +8,7 @@
         body { text-align: center; font-family: Arial, sans-serif; padding: 20px; }
         .btn { padding: 10px 20px; margin: 10px; font-size: 16px; background: #007BFF; color: white; border: none; cursor: pointer; border-radius: 5px; }
         .btn:hover { background: #0056b3; }
+        iframe { width: 80%; height: 600px; border: none; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -18,15 +19,19 @@
     <button class="btn" onclick="openMenu('ko')">🇰🇷 한국어</button>
     <button class="btn" onclick="openMenu('lo')">🇱🇦 ພາສາລາວ</button>
 
+    <iframe id="pdfViewer" src="" hidden></iframe>
+
     <script>
         function openMenu(lang) {
             let menuLinks = {
-                "en": "https://drive.google.com/file/d/1J1guvLykjAQ_lYjrWDaRLvqc-8XIHy_5/view",
-                "zh": "https://drive.google.com/file/d/1HDnE2CcNP-ur1muXaSFVe6nbfiksQHvV/view",
-                "ko": "https://drive.google.com/file/d/1NOKmN5PVzRpDmxhUh1IEg3ZA2bFK0W5u/view",
-                "lo": "https://drive.google.com/file/d/1d-wI9loyBW5Zs89tKDeHL5L_ikl5vAdt/view"
+                "en": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1J1guvLykjAQ_lYjrWDaRLvqc-8XIHy_5&embedded=true",
+                "zh": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1HDnE2CcNP-ur1muXaSFVe6nbfiksQHvV&embedded=true",
+                "ko": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1NOKmN5PVzRpDmxhUh1IEg3ZA2bFK0W5u&embedded=true",
+                "lo": "https://docs.google.com/gview?url=https://drive.google.com/uc?id=1d-wI9loyBW5Zs89tKDeHL5L_ikl5vAdt&embedded=true"
             };
-            window.open(menuLinks[lang], "_blank");
+            
+            document.getElementById("pdfViewer").src = menuLinks[lang];
+            document.getElementById("pdfViewer").hidden = false;
         }
     </script>
 </body>
